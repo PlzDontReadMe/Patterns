@@ -44,8 +44,8 @@ public class DeliveryTest {
         $(byName("phone")).val(DataGenerator.generatePhone("ru"));
         $("[data-test-id=\"agreement\"].checkbox").click();
         $(byText("Запланировать")).click();
-        $(By.className("notification__content"))
-//                .shouldHave(Condition.text("Успешно! Встреча успешно забронирована на " +firstMeetingDate ), Duration.ofSeconds(15))//FixMe не видит текст в попапе
+        $("[data-test-id=\"success-notification\"]")
+//                .shouldHave(Condition.text("Успешно! Встреча успешно забронирована на " + firstMeetingDate), Duration.ofSeconds(15))//FixMe не видит текст в попапе
                 .shouldHave(appear);
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[placeholder=\"Дата встречи\"]").val(secondMeetingDate);
