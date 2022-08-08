@@ -6,14 +6,10 @@ import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-
 import java.time.Duration;
-import java.util.Locale;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byName;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -37,28 +33,26 @@ public class DeliveryTest {
         var secondMeetingDate = DataGenerator.generateDate(daysToAddForSecondMeeting);
 
 
-        $("[placeholder=\"Город\"]").val(DataGenerator.generateCity("ru"));//
+        $("[placeholder=\"Город\"]").val(DataGenerator.Registration.generateUser("ru").getCity());//
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[placeholder=\"Дата встречи\"]").val(firstMeetingDate);
-        $(byName("name")).val(DataGenerator.generateName("ru"));//FixMe буква "ё" не принимается формой, указано написать как в паспорте
-        $(byName("phone")).val(DataGenerator.generatePhone("ru"));
+        $(byName("name")).val(DataGenerator.Registration.generateUser("ru").getName());
+        $(byName("phone")).val(DataGenerator.Registration.generateUser("ru").getPhone());
         $("[data-test-id=\"agreement\"].checkbox").click();
         $(byText("Запланировать")).click();
         $("[data-test-id=\"success-notification\"]")
-//                .shouldHave(Condition.text("Успешно! Встреча успешно забронирована на " + firstMeetingDate), Duration.ofSeconds(15))//FixMe не видит текст в попапе
+                .shouldHave(exactText("Успешно! Встреча успешно запланирована на " + firstMeetingDate), Duration.ofSeconds(15))
                 .shouldHave(appear);
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[placeholder=\"Дата встречи\"]").val(secondMeetingDate);
         $(byText("Запланировать")).click();
         $("[data-test-id=\"replan-notification\"]")
-//                .should(Condition.text("У вас уже запланирована встреча на другую дату.Перепланировать?"))//FixMe не видит текст в попапе
+                .shouldHave(Condition.exactText(" Необходимо подтверждение  У вас уже запланирована встреча на другую дату. Перепланировать?"), Duration.ofSeconds(15))
                 .should(visible);
         $(byText("Перепланировать")).click();
         $("[data-test-id=\"success-notification\"]")
-//                .shouldHave(Condition.text("Успешно! Встреча успешно забронирована на " + secondMeetingDate), Duration.ofSeconds(15))//FixMe не видит текст в попапе
-                .shouldHave(visible);
-
+                .shouldHave(Condition.exactText("Успешно! Встреча успешно забронирована на " + secondMeetingDate), Duration.ofSeconds(15))
+                .shouldHave(appear);
     }
-
 }
 

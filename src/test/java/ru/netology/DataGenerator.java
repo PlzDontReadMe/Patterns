@@ -2,7 +2,11 @@ package ru.netology;
 
 
 import com.github.javafaker.Faker;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Value;
+import lombok.experimental.UtilityClass;
 
 
 import java.time.LocalDate;
@@ -16,35 +20,20 @@ public class DataGenerator {
         String date = LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         return date;
     }
-
-    public static String generateCity(String locale) {
-        return faker.address().city();
+@UtilityClass
+    public static class Registration {
+    public static UserInfo generateUser(String locale) {
+            return new UserInfo();
+        }
     }
-
-    public static String generateName(String locale) {
+    @Data
+    @NoArgsConstructor
+    public static class UserInfo {
+        String city = faker.address().cityName();
         String name = faker.name().fullName();
-        return name;
+        String phone = faker.phoneNumber().phoneNumber();
     }
 
-    public static String generatePhone(String locale) {
-        return faker.phoneNumber().phoneNumber();
-    }
-
-
-//@UtilityClass
-//    public static class Registration {
-//    public static UserInfo generateUser(String locale) {
-//            Faker faker = new Faker(new Locale(locale));
-//            return new UserInfo(generateCity(locale),generateName(locale),generatePhone(locale));
-//        }
-//    }
-//
-//    @Data
-//    public static class UserInfo {
-//        String city;
-//        String name;
-//        String phone;
-//    }
 }
 
 
