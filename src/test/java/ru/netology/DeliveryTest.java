@@ -1,7 +1,7 @@
 package ru.netology;
 
 
-import com.codeborne.selenide.Condition;
+
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,11 +47,11 @@ public class DeliveryTest {
         $("[placeholder=\"Дата встречи\"]").val(secondMeetingDate);
         $(byText("Запланировать")).click();
         $("[data-test-id=\"replan-notification\"]")
-                .shouldHave(exactText("Необходимо подтверждение  У вас уже запланирована встреча на другую дату. Перепланировать?"), Duration.ofSeconds(15))
+                .shouldHave(textCaseSensitive("Необходимо подтверждение У вас уже запланирована встреча на другую дату. Перепланировать?"), Duration.ofSeconds(15))
                 .should(visible);
         $(byText("Перепланировать")).click();
         $("[data-test-id=\"success-notification\"]")
-                .shouldHave(exactText("Успешно! Встреча успешно забронирована на " + secondMeetingDate), Duration.ofSeconds(15))
+                .shouldHave(exactText("Успешно! Встреча успешно запланирована на " + secondMeetingDate), Duration.ofSeconds(15))
                 .shouldHave(visible);
     }
 }
